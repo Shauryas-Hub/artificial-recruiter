@@ -1,0 +1,128 @@
+# ============================================================================
+# Redrob Ranker — Scoring Configuration v2
+# ============================================================================
+# All weights, thresholds, and constants live here. Edit here only.
+# FIX: career_fit weights now sum correctly to 1.0 (positive) + separate penalty.
+# ============================================================================
+
+embedding:
+  model_name: "sentence-transformers/all-MiniLM-L6-v2"
+  dimension: 384
+  normalize: true
+  batch_size: 256
+  description_max_words: 120
+
+# ----------------------------------------------------------------------------
+# TRAP DETECTOR thresholds
+# ----------------------------------------------------------------------------
+trap_detection:
+  tenure_mismatch_months: 3
+  proficiency_duration_stuffing:
+    min_proficiency_ordinal: 3        # "advanced" or "expert"
+    max_duration_months: 3
+    max_endorsements: 2
+  title_description_cosine_threshold: 0.15
+  experience_mismatch_years: 2.0
+  mass_expert_threshold: 4
+  mass_expert_max_backing: 2
+  activity_impossible_min_gap_days: 365
+  salary_inversion: true
+  impossible_tenure_gap_months: 12
+  per_flag_penalty: 0.15
+  max_trust_penalty: 0.95
+  hard_honeypot_flag_count: 2         # >=2 genuine-impossibility flags => drop
+
+# ----------------------------------------------------------------------------
+# SKILL-FIT weights
+# FIX: keyword_boost scan layer added for exact alias matches.
+# ----------------------------------------------------------------------------
+skill_fit:
+  cosine_match_threshold: 0.42        # slightly lower to catch Tier-5 paths
+  proficiency_ordinal:
+    beginner: 1
+    intermediate: 2
+    advanced: 3
+    expert: 4
+  trust_formula: "proficiency_ordinal * log1p(duration_months) * log1p(endorsements+1)"
+  trust_min: 0.05
+  assessment_credibility_threshold: 50
+  assessment_credibility_penalty: 0.4
+  must_have_weight: 0.70
+  nice_to_have_weight: 0.30
+  keyword_boost_weight: 0.15         # additive boost when exact keyword alias found
+
+# ----------------------------------------------------------------------------
+# CAREER-FIT weights
+# FIX: weights now sum to 1.0 for positives; penalties are subtracted separately.
+# Positive weights: 0.28+0.38+0.20+0.08+0.06 = 1.00
+# Penalty weights are independent multipliers, not part of the sum.
+# ----------------------------------------------------------------------------
+career_fit:
+  # Positive component weights (must sum to 1.0)
+  title_alignment_weight: 0.28
+  applied_ml_at_product_weight: 0.38
+  shipped_system_weight: 0.20
+  experience_band_weight: 0.08
+  industry_fit_weight: 0.06
+  # Penalty magnitudes (subtracted from final career_fit, clamped to [0,1])
+  job_hop_penalty_max: 0.20
+  services_only_penalty_max: 0.25
+  negative_title_penalty_max: 0.35
+  # Job-hop detection
+  job_hop_tenure_months: 18
+  # Experience band
+  experience_ideal_min: 6
+  experience_ideal_max: 8
+  experience_acceptable_min: 5
+  experience_acceptable_max: 9
+  # Location scoring
+  location_india_preferred_bonus: 0.05
+  location_outside_india_penalty: 0.10
+
+# ----------------------------------------------------------------------------
+# BEHAVIORAL-FIT weights
+# ----------------------------------------------------------------------------
+behavioral_fit:
+  availability_weight: 0.45
+  engagement_weight: 0.30
+  trust_verification_weight: 0.15
+  engineering_signal_weight: 0.10
+  days_active_ideal: 30
+  days_active_max: 365
+  notice_period_ideal_days: 30
+  notice_period_max_days: 90
+  response_rate_ideal: 0.7
+  response_rate_floor: 0.1
+  avg_response_time_ideal_hours: 24
+  avg_response_time_max_hours: 168
+  github_activity_ideal: 50
+  combine_method: "geometric"
+
+# ----------------------------------------------------------------------------
+# HYBRID SCORER — multiplicative gating (fixed formula)
+#   raw = skill_combined * career_fit^alpha * behavioral_fit^beta * (1 - lambda*trust_penalty)
+# ----------------------------------------------------------------------------
+scorer:
+  w_s: 0.70
+  w_n: 0.30
+  alpha: 1.0
+  beta: 0.80                          # slightly reduced behavioral exponent so
+                                      # a weak GitHub score doesn't bury strong ML fit
+  lambda: 0.50
+  honeypot_score: 0.0
+
+# ----------------------------------------------------------------------------
+# OUTPUT
+# ----------------------------------------------------------------------------
+output:
+  top_n: 100
+  score_precision: 4
+  normalize: "minmax"
+  filename: "team_redrob.csv"
+  encoding: "utf-8"
+  newline: "\n"
+
+# ----------------------------------------------------------------------------
+# DETERMINISM
+# ----------------------------------------------------------------------------
+random_seed: 42

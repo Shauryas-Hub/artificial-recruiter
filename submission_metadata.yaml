@@ -1,0 +1,98 @@
+# ============================================================================
+# Redrob Hackathon — Submission Metadata
+# ============================================================================
+# Fill in ALL required fields before portal submission.
+# Fields marked REQUIRED will cause Stage 1 rejection if empty.
+# ============================================================================
+
+# ============================================================================
+# Team identity  [REQUIRED]
+# ============================================================================
+team_name: "team_redrob"
+
+primary_contact:
+  name: ""          # REQUIRED — fill before submitting
+  email: ""         # REQUIRED — fill before submitting
+  phone: ""         # REQUIRED — fill before submitting
+
+team_members:
+  - name: ""        # REQUIRED
+    email: ""       # REQUIRED
+    role: "ML Engineer"
+
+# ============================================================================
+# Code and reproducibility  [REQUIRED]
+# ============================================================================
+github_repo: ""     # REQUIRED — e.g. https://github.com/USERNAME/redrob-ranker
+
+sandbox_link: ""    # REQUIRED — e.g. https://huggingface.co/spaces/USERNAME/redrob-ranker
+                    # Deploy sandbox/app.py to HuggingFace Spaces (Streamlit SDK):
+                    #   1. Create a new Space at huggingface.co/new-space
+                    #   2. Select Streamlit SDK
+                    #   3. Upload all project files
+                    #   4. Paste the Space URL here
+
+reproduce_command: "python scripts/rank.py --feature-store artifacts/candidate_features.parquet --out submission/team_redrob.csv"
+# NOTE: run precompute first (one-time, offline):
+#   python scripts/precompute.py --candidates data/candidates.jsonl
+
+# ============================================================================
+# Compute environment
+# ============================================================================
+compute:
+  platform: "Local CPU machine"
+  cpu_cores: 8
+  ram_gb: 16
+  python_version: "3.11"
+  os: "Linux / macOS / Windows"
+  uses_gpu_for_inference: false      # MUST be false — no GPU during ranking
+  has_network_during_ranking: false  # MUST be false — no API calls during ranking
+  pre_computation_required: true     # precompute.py runs offline (no time limit)
+  pre_computation_time_minutes: 7    # ~389s on typical laptop
+
+# ============================================================================
+# AI tools declaration  [REQUIRED — honest declaration, not penalized]
+# ============================================================================
+ai_tools_used:
+  - "Claude"
+  - "GitHub Copilot"
+
+ai_usage_summary: |
+  Claude was used for architecture discussion, code review, and debugging.
+  GitHub Copilot was used for autocomplete during development.
+  No candidate data was fed to any LLM during ranking.
+  All scoring logic, feature engineering, and ranking decisions were
+  implemented and validated by the team.
+
+# ============================================================================
+# Approach summary (recommended — used at Stage 4 review)
+# ============================================================================
+methodology_summary: |
+  Two-phase hybrid ranker. Phase 1 (offline, precompute.py): loads 100K
+  candidates, runs structural trap detection (skill stuffing, mass-expert,
+  date contradictions, impossible tenure, activity anomalies), embeds all
+  skill/career text using sentence-transformers/all-MiniLM-L6-v2, and
+  computes three feature blocks per survivor: skill_fit (semantic coverage
+  of 4 must-have JD skills with keyword-alias boost layer), career_fit
+  (title alignment + applied-ML-years-at-product-companies + shipped-system
+  semantic evidence + experience band + industry fit, minus job-hop and
+  services-only penalties; weights sum to exactly 1.0), and behavioral_fit
+  (weighted geometric mean of availability, engagement, trust-verification,
+  engineering signal). Hard trap-drops (>=2 genuine-impossibility flags)
+  remove honeypots before writing the parquet feature store.
+  Phase 2 (rank.py, <5s, pure numpy/pandas, no network): loads parquet,
+  applies formula raw = (0.7*skill_must + 0.3*skill_nice) * career_fit^1.0
+  * behavioral_fit^0.8 * (1 - 0.5*trust_penalty), min-max normalizes over
+  all survivors, selects top-100, generates per-row reasoning from feature
+  columns (no LLM), writes CSV. Reasoning uses varied opening clauses keyed
+  to each candidate's strongest differentiator to avoid templating.
+
+# ============================================================================
+# Declarations
+# ============================================================================
+declarations:
+  read_submission_spec: true
+  code_is_original_work: true
+  no_collusion: true
+  honeypot_check_done: true          # trap_detector.py drops >=2 hard-flag candidates
+  reproduction_tested: true          # rank.py verified to run <5s on CPU from parquet

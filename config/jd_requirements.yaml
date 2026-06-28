@@ -1,0 +1,351 @@
+# ============================================================================
+# Redrob Hackathon — Job Description Requirements (machine-actionable)
+# ============================================================================
+# Derived from job_description.docx. Every value here is referenced by the
+# feature/scoring modules. Edit here ONLY — never hardcode in src/.
+# ============================================================================
+
+role:
+  title: "Senior AI Engineer — Founding Team"
+  company: "Redrob AI"
+  locations_preferred: ["Pune", "Noida"]
+  locations_acceptable_india:
+    - "Pune"
+    - "Noida"
+    - "Hyderabad"
+    - "Mumbai"
+    - "Delhi NCR"
+    - "Gurgaon"
+    - "Faridabad"
+    - "Chandigarh"
+    - "Bengaluru"
+    - "Bangalore"
+    - "Delhi"
+    - "Gurugram"
+  employment_type: "Full-time"
+  experience_years_band: [5, 9]
+  experience_ideal: [6, 8]
+
+# ----------------------------------------------------------------------------
+# MUST-HAVE skills — 4 hard requirements from JD.
+# Each entry is a canonical phrase; candidate skills/descriptions are matched
+# semantically (embedding cosine) AND by keyword alias scan.
+# ----------------------------------------------------------------------------
+must_have_skills:
+  - name: "embeddings-based retrieval"
+    aliases:
+      - "sentence-transformers"
+      - "OpenAI embeddings"
+      - "BGE"
+      - "E5"
+      - "dense retrieval"
+      - "embedding model"
+      - "embedding-based search"
+      - "semantic search"
+      - "vector search"
+      - "dense vector"
+      - "bi-encoder"
+      - "text embeddings"
+      - "neural retrieval"
+      - "semantic similarity"
+      - "retrieval augmented"
+      - "RAG"
+    keyword_boost: 1.2   # multiplier when exact alias found in skill name
+
+  - name: "vector database / hybrid search infrastructure"
+    aliases:
+      - "Pinecone"
+      - "Weaviate"
+      - "Qdrant"
+      - "Milvus"
+      - "OpenSearch"
+      - "Elasticsearch"
+      - "FAISS"
+      - "vector database"
+      - "vector db"
+      - "hybrid search"
+      - "ANN index"
+      - "approximate nearest neighbor"
+      - "HNSW"
+      - "IVF"
+      - "vector store"
+      - "Chroma"
+      - "pgvector"
+    keyword_boost: 1.2
+
+  - name: "strong Python"
+    aliases:
+      - "Python"
+      - "Python 3"
+      - "production Python"
+      - "backend Python"
+      - "PyTorch"
+      - "TensorFlow"
+      - "scikit-learn"
+      - "numpy"
+      - "pandas"
+    keyword_boost: 1.0
+
+  - name: "ranking evaluation frameworks"
+    aliases:
+      - "NDCG"
+      - "MRR"
+      - "MAP"
+      - "offline-to-online correlation"
+      - "A/B testing"
+      - "evaluation framework"
+      - "ranking eval"
+      - "information retrieval evaluation"
+      - "offline evaluation"
+      - "relevance labeling"
+      - "human judgment"
+      - "precision@k"
+      - "recall@k"
+      - "click-through rate"
+      - "online metrics"
+    keyword_boost: 1.2
+
+# ----------------------------------------------------------------------------
+# NICE-TO-HAVE skills — 5 bonus factors.
+# ----------------------------------------------------------------------------
+nice_to_have_skills:
+  - name: "LLM fine-tuning"
+    aliases:
+      - "LoRA"
+      - "QLoRA"
+      - "PEFT"
+      - "fine-tuning"
+      - "instruction tuning"
+      - "adapter tuning"
+      - "RLHF"
+      - "DPO"
+      - "SFT"
+      - "parameter efficient"
+
+  - name: "learning-to-rank"
+    aliases:
+      - "XGBoost"
+      - "LightGBM"
+      - "LambdaMART"
+      - "learning to rank"
+      - "LTR"
+      - "neural ranking model"
+      - "rank model"
+      - "pointwise"
+      - "pairwise"
+      - "listwise"
+      - "RankNet"
+      - "LambdaRank"
+
+  - name: "HR-tech / recruiting / marketplace products"
+    aliases:
+      - "HR-tech"
+      - "recruiting tech"
+      - "talent marketplace"
+      - "recruitment"
+      - "HR technology"
+      - "ATS"
+      - "applicant tracking"
+      - "talent intelligence"
+      - "candidate matching"
+
+  - name: "distributed systems / large-scale inference"
+    aliases:
+      - "distributed systems"
+      - "large-scale inference"
+      - "scalable inference"
+      - "distributed training"
+      - "system design"
+      - "microservices"
+      - "high throughput"
+      - "low latency serving"
+      - "model serving"
+      - "TorchServe"
+      - "triton"
+      - "vLLM"
+
+  - name: "open-source AI/ML contributions"
+    aliases:
+      - "open source"
+      - "OSS contributions"
+      - "GitHub contributions"
+      - "open-source ML"
+      - "published paper"
+      - "arxiv"
+      - "kaggle"
+      - "competition"
+
+# ----------------------------------------------------------------------------
+# STRONG NEGATIVE signals — explicitly stated in JD.
+# These are the JD's "things we explicitly do NOT want."
+# ----------------------------------------------------------------------------
+strong_negatives:
+  - name: "computer_vision_speech_robotics_only"
+    skill_keywords: ["computer vision", "opencv", "image classification", "object detection",
+                     "yolo", "speech recognition", "tts", "text-to-speech", "robotics",
+                     "ros", "slam", "pose estimation", "face recognition", "ocr"]
+    description_keywords: ["computer vision", "speech recognition", "robotics", "image processing"]
+    penalty: 0.15
+    requires_nlp_ir_offset: true  # penalty waived if NLP/IR signals also present
+
+  - name: "marketing_manager_profile"
+    title_keywords: ["marketing manager", "operations manager", "hr manager", "accountant",
+                     "civil engineer", "mechanical engineer", "graphic designer",
+                     "content writer", "sales executive", "customer support", "business analyst"]
+    penalty: 0.40
+    description: "Non-technical profile with AI keywords stuffed in skills"
+
+# ----------------------------------------------------------------------------
+# Title prototypes — embedded; career_fit compares candidate titles to these.
+# ----------------------------------------------------------------------------
+title_prototypes:
+  must:
+    - "AI Engineer"
+    - "ML Engineer"
+    - "Machine Learning Engineer"
+    - "Search Engineer"
+    - "Ranking Engineer"
+    - "Recommendation Systems Engineer"
+    - "NLP Engineer"
+    - "Data Scientist"
+    - "Applied Scientist"
+    - "Software Engineer ML"
+    - "Applied ML Engineer"
+    - "Research Engineer"
+    - "Senior AI Engineer"
+    - "Staff ML Engineer"
+    - "Principal ML Engineer"
+    - "MLOps Engineer"
+    - "Information Retrieval Engineer"
+  adjacent:
+    - "Backend Engineer"
+    - "Data Engineer"
+    - "Software Engineer"
+    - "Platform Engineer"
+    - "Infrastructure Engineer"
+    - "Full Stack Engineer"
+    - "Senior Software Engineer"
+
+# ----------------------------------------------------------------------------
+# Shipped-system evidence phrases — Tier-5 path.
+# A candidate who built a real system scores high even without keywords.
+# ----------------------------------------------------------------------------
+shipped_system_phrases:
+  - "built a recommendation system"
+  - "deployed a ranking system to production"
+  - "shipped a search system"
+  - "served retrieval at scale"
+  - "launched an ML model to production"
+  - "productionized embeddings"
+  - "built vector search"
+  - "A/B tested a ranking model"
+  - "owned the retrieval pipeline"
+  - "built a matching system"
+  - "improved ranking quality"
+  - "end-to-end ML pipeline"
+  - "real-time inference"
+  - "reduced latency"
+  - "improved precision"
+  - "embedding drift"
+  - "index refresh"
+  - "retrieval quality regression"
+  - "candidate retrieval"
+  - "document retrieval"
+
+# ----------------------------------------------------------------------------
+# DISQUALIFIERS — from JD. Soft penalties applied in career_features.
+# ----------------------------------------------------------------------------
+disqualifiers:
+  pure_research_no_production:
+    weight: 0.30
+    description: "Career entirely in academic/research labs with no production deployments"
+  recent_langchain_only:
+    weight: 0.40
+    description: "AI experience consists only of recent LangChain + OpenAI work"
+  no_production_code_18mo:
+    weight: 0.40
+    description: "Senior engineer not writing production code for 18+ months"
+  title_chaser:
+    weight: 0.25
+    description: "Job-hops every 1.5 years chasing title progression"
+  framework_enthusiast:
+    weight: 0.20
+    description: "Framework tutorials only, no systems thinking"
+  pure_cv_speech_robotics:
+    weight: 0.35
+    description: "Primary expertise CV/speech/robotics without NLP/IR exposure"
+  consulting_only:
+    weight: 0.30
+    description: "Entire career in listed consulting/services firms"
+
+# ----------------------------------------------------------------------------
+# COMPANY CLASSIFICATION
+# ----------------------------------------------------------------------------
+company_classification:
+  services:
+    - "TCS"
+    - "Infosys"
+    - "Wipro"
+    - "Accenture"
+    - "Capgemini"
+    - "Cognizant"
+    - "Mindtree"
+    - "HCL"
+    - "Tech Mahindra"
+    - "Mphasis"
+    - "L&T Infotech"
+    - "Hexaware"
+  product_neutral:
+    - "Flipkart"
+    - "Swiggy"
+    - "Zomato"
+    - "Ola"
+    - "Nykaa"
+    - "CRED"
+    - "Razorpay"
+    - "Zepto"
+    - "Meesho"
+    - "PhonePe"
+    - "Paytm"
+    - "Unacademy"
+    - "Byju"
+    - "Urban Company"
+    - "Dunzo"
+    - "Udaan"
+    - "Delhivery"
+    - "Porter"
+    - "Mad Street Den"
+    - "Verloop"
+    - "Rephrase"
+    - "Sarvam"
+    - "Krutrim"
+    - "Aganitha"
+    - "Niramai"
+    - "Netflix"
+    - "Google"
+    - "Microsoft"
+    - "Amazon"
+    - "Meta"
+    - "LinkedIn"
+    - "Uber"
+    - "Dunder Mifflin"
+    - "Acme Corp"
+    - "Wayne Enterprises"
+    - "Stark Industries"
+    - "Pied Piper"
+    - "Hooli"
+    - "Initech"
+    - "Globex Inc"
+    - "Globex"
+    - "Redrob AI"
+    - "Redrob"
+
+# ----------------------------------------------------------------------------
+# Behavioral logistics
+# ----------------------------------------------------------------------------
+logistics:
+  notice_period_ideal_days: 30
+  notice_period_acceptable_days: 90
+  work_modes_ok: ["hybrid", "remote", "onsite", "flexible"]
+  relocation_required_if_outside_india: true
+  india_preferred: true
