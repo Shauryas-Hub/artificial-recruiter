@@ -13,7 +13,7 @@ team_name: "team_redrob"
 primary_contact:
   name: "Shaurya"          # REQUIRED — fill before submitting
   email: "chhayajadhav2806@gmail.com"         # REQUIRED — fill before submitting
-  phone: ""         # REQUIRED — fill before submitting
+  phone: "7498711306"         # REQUIRED — fill before submitting
 
 team_members:
   - name: "Shaurya"        # REQUIRED
@@ -25,7 +25,8 @@ team_members:
 # ============================================================================
 github_repo: "https://github.com/Shauryas-Hub/artificial-recruiter"     # REQUIRED — e.g. https://github.com/USERNAME/redrob-ranker
 
-sandbox_link: "sandbox_link: "https://huggingface.co/spaces/Shauryajadhav/artificial-recruiter""    # REQUIRED — e.g. https://huggingface.co/spaces/USERNAME/redrob-ranker
+sandbox_link: "https://huggingface.co/spaces/Shauryajadhav/artificial-recruiter"
+   # REQUIRED — e.g. https://huggingface.co/spaces/USERNAME/redrob-ranker
                     # Deploy sandbox/app.py to HuggingFace Spaces (Streamlit SDK):
                     #   1. Create a new Space at huggingface.co/new-space
                     #   2. Select Streamlit SDK
