@@ -200,4 +200,3 @@ The Stage 4 evaluation explicitly checks for templated reasoning. The reasoning 
 Fast, CPU-friendly, good multilingual coverage, 384 dimensions. Produces high-quality semantic similarity for the skill/career matching use case. The compute constraints (no GPU, ≤16 GB) make this the right size.
 
 ---
-d reasoning | ✅ reasoning.py from feature columns |
