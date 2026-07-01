@@ -41,11 +41,11 @@ reproduce_command: "python scripts/rank.py --feature-store artifacts/candidate_f
 # Compute environment
 # ============================================================================
 compute:
-  platform: "Local CPU machine"
+  platform: "Windows 11 Pro"
   cpu_cores: 8
   ram_gb: 16
   python_version: "3.11"
-  os: "Linux / macOS / Windows"
+  os: "Windows"
   uses_gpu_for_inference: false      # MUST be false — no GPU during ranking
   has_network_during_ranking: false  # MUST be false — no API calls during ranking
   pre_computation_required: true     # precompute.py runs offline (no time limit)
@@ -56,11 +56,9 @@ compute:
 # ============================================================================
 ai_tools_used:
   - "Claude"
-  - "GitHub Copilot"
 
 ai_usage_summary: |
   Claude was used for architecture discussion, code review, and debugging.
-  GitHub Copilot was used for autocomplete during development.
   No candidate data was fed to any LLM during ranking.
   All scoring logic, feature engineering, and ranking decisions were
   implemented and validated by the team.
